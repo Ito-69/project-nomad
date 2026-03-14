@@ -1,0 +1,26 @@
+# Environment and secrets – never commit
+.env
+.env.local
+.env.*.local
+
+# Project NOMAD runtime data (large or machine-specific)
+storage/
+nomad-disk-info.json
+
+# Docker/MySQL/Redis data
+mysql/
+redis/
+
+# Working directory for pmtiles extraction (can be recreated)
+pmtiles-work/
+*.pmtiles
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Optional: uncomment if you keep logs out of git
+# storage/logs/

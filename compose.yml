@@ -1,0 +1,106 @@
+name: project-nomad
+services:
+  admin:
+    image: ghcr.io/crosstalk-solutions/project-nomad:latest
+    pull_policy: always
+    container_name: nomad_admin
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${NOMAD_HTTP_PORT:-8180}:8080"
+    volumes:
+      - ./storage:/app/storage
+      - ./nomad-disk-info.json:/app/storage/nomad-disk-info.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh
+      - nomad-update-shared:/app/update-shared
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - LOG_LEVEL=debug
+      - APP_KEY=${APP_KEY}
+      - HOST=0.0.0.0
+      - URL=${NOMAD_URL}
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=nomad
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=nomad
+      - DB_SSL=false
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dozzle:
+    image: amir20/dozzle:v10.0
+    container_name: nomad_dozzle
+    restart: unless-stopped
+    ports:
+      - "9999:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_ENABLE_ACTIONS=true
+      - DOZZLE_ENABLE_SHELL=true
+
+  mysql:
+    image: mysql:8.0
+    container_name: nomad_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=nomad
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: nomad_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  updater:
+    build:
+      context: ./sidecar-updater
+      dockerfile: Dockerfile
+    container_name: nomad_updater
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PROJECT_NOMAD_HOST_PATH:-/opt/project-nomad}:/opt/project-nomad
+      - nomad-update-shared:/shared
+
+volumes:
+  nomad-update-shared:
+    driver: local
+
