@@ -5,6 +5,7 @@ services:
     pull_policy: always
     container_name: nomad_admin
     restart: unless-stopped
+    user: "${NOMAD_UID:-1000}:${NOMAD_GID:-100}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

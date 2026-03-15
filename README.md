@@ -53,6 +53,12 @@ Apps (Kiwix, Kolibri, Ollama, etc.) are installed and managed from the UI; their
 
 ---
 
+## Reverse proxy (Traefik, etc.)
+
+The Command Center can run behind a reverse proxy on your domain. The main UI and Chat work from in-app links. Links to the other apps (Kiwix, CyberChef, Notes, Kolibri) are built inside the container and may open the main page instead of the app when behind a proxy. **Workaround:** open those apps via direct URL (your domain or NOMAD host IP, ports 8090, 8100, 8200, 8300).
+
+---
+
 ## Symlinks for Kiwix (Information Library)
 
 NOMAD creates the **Kiwix** container with a bind mount to **`/opt/project-nomad/storage/zim`** on the host. If your project directory is **not** at `/opt/project-nomad` (e.g. you run from `~/Docker/project-nomad`), that path does not exist and Kiwix will see an empty `/data` and fail to start.
@@ -129,6 +135,25 @@ The **updater** service mounts the project directory as `/opt/project-nomad` so 
 - **`.env`** – contains secrets; use `.env.example` as a template and never commit `.env`.
 - **`storage/`** – ZIM files, maps, MySQL/Redis data, logs; all ignored via `.gitignore`.
 - **`pmtiles-work/`** and **`*.pmtiles`** – working files and map tiles; recreated or copied as needed.
+
+---
+
+## Storage permissions
+
+The **admin** container runs as your user (`user: NOMAD_UID:NOMAD_GID`). So that the UI can both **manage apps** (start/stop Kiwix, Ollama, etc. via the Docker socket) and **create files you can delete** (in `storage/`), use your host user UID and the **docker** group GID in `.env`:
+
+- `NOMAD_UID=1000` – your user UID (e.g. 1000 for `ito`)
+- `NOMAD_GID=131` – your host **docker** group GID (so the container can access `/var/run/docker.sock`). Find it with `getent group docker`.
+
+With `1000:131`, storage files are owned by you and the Apps page correctly shows installed apps and allows Install/Start/Stop.
+
+**If you already have root-owned files in `storage/`** (from before setting `user:`), fix once with:
+
+```bash
+sudo scripts/fix-storage-permissions.sh
+```
+
+Do **not** chown `mysql/` or `redis/` – those must stay UID 999 for the database and Redis containers.
 
 ---
 
