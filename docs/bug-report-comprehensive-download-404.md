@@ -32,7 +32,14 @@ Either:
 ## Workarounds (user side)
 
 - Clear the stuck job from Redis and restart admin (see [docs/stuck-downloads.md](stuck-downloads.md)).
-- Download a specific ZIM manually with wget (e.g. [scripts/download-devdocs-react.sh](../scripts/download-devdocs-react.sh)) and place it in `storage/zim/`.
+- Download a specific ZIM manually with `wget` and place it in `storage/zim/`. Example (React DevDocs latest available at the time of writing):
+
+```bash
+mkdir -p storage/zim
+cd storage/zim
+wget -c -O devdocs_en_react_2026-02.zim \
+  "https://download.kiwix.org/zim/devdocs/devdocs_en_react_2026-02.zim"
+```
 
 ---
 
