@@ -20,6 +20,7 @@ Upstream does **not** publish a separate “compose-only” repo; this one fills
 | `pmtiles-work/`, `*.pmtiles` | Large map assets |
 | `docs/agent-prompt-traefik-45.md` | Personal deploy notes (gitignored) |
 | `docs/issue-url.txt` | One-off GitHub issue draft URL |
+| `docs/bug-report-*.md` | Filed upstream — local copies only (gitignored) |
 
 Already in `.gitignore`: `.env`, `storage/`, `mysql/`, `redis/`, etc.
 
@@ -51,6 +52,7 @@ image: ghcr.io/crosstalk-solutions/project-nomad:latest
 
 Only `updater` is built locally: `docker compose build updater`.
 
-## Related upstream issue
+## Related upstream issues (local notes only)
 
-[Issue #931](https://github.com/Crosstalk-Solutions/project-nomad/issues/931) (Ollama concurrent update UX) — maintainer notes a per-service lock exists; UI should disable Update during long pulls. Workaround: click Update once and wait.
+- [#931](https://github.com/Crosstalk-Solutions/project-nomad/issues/931) — Ollama update UX (double-click during long pull). Maintainer: lock exists; UI should disable Update + show progress.
+- Comprehensive tier 404 downloads — see local `docs/stuck-downloads.md` for workarounds; bug reports stay out of this repo.

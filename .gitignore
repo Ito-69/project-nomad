@@ -6,6 +6,7 @@
 # Personal / machine-specific notes (not for public repo)
 docs/agent-prompt-traefik-45.md
 docs/issue-url.txt
+docs/bug-report-*.md
 
 # Project NOMAD runtime data (large or machine-specific)
 storage/

@@ -69,7 +69,6 @@ Detailed guides are in **`docs/`**:
 | Updater and project path | [docs/updater.md](docs/updater.md) |
 | Storage permissions | [docs/storage-permissions.md](docs/storage-permissions.md) |
 | Stuck downloads (404) | [docs/stuck-downloads.md](docs/stuck-downloads.md) |
-| Bug report (404 / Comprehensive tier) | [docs/bug-report-comprehensive-download-404.md](docs/bug-report-comprehensive-download-404.md) |
 
 ---
 
