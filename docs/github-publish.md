@@ -21,6 +21,7 @@ Upstream does **not** publish a separate “compose-only” repo; this one fills
 | `docs/agent-prompt-traefik-45.md` | Personal deploy notes (gitignored) |
 | `docs/issue-url.txt` | One-off GitHub issue draft URL |
 | `docs/bug-report-*.md` | Filed upstream — local copies only (gitignored) |
+| `docs/custom-maps.md` | Obsolete (pre-v1.31 manual Europe extract) — gitignored |
 
 Already in `.gitignore`: `.env`, `storage/`, `mysql/`, `redis/`, etc.
 

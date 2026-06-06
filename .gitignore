@@ -7,6 +7,7 @@
 docs/agent-prompt-traefik-45.md
 docs/issue-url.txt
 docs/bug-report-*.md
+docs/custom-maps.md
 
 # Project NOMAD runtime data (large or machine-specific)
 storage/

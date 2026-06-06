@@ -65,7 +65,6 @@ Detailed guides are in **`docs/`**:
 | LAN `.env` template | [`.env.lan.example`](.env.lan.example) |
 | Traefik `.env` template | [`.env.traefik.example`](.env.traefik.example) |
 | Kiwix symlinks (Information Library) | [docs/kiwix-symlinks.md](docs/kiwix-symlinks.md) |
-| Custom maps (e.g. Europe) | [docs/custom-maps.md](docs/custom-maps.md) |
 | Updater and project path | [docs/updater.md](docs/updater.md) |
 | Storage permissions | [docs/storage-permissions.md](docs/storage-permissions.md) |
 | Stuck downloads (404) | [docs/stuck-downloads.md](docs/stuck-downloads.md) |
