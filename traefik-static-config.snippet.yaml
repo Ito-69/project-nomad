@@ -1,0 +1,17 @@
+# Static Traefik config snippets for 192.168.68.45 — merge into existing files.
+# See docs/traefik.md for full deploy steps.
+
+# --- traefikv3/config/traefik.yaml (add under entryPoints:) ---
+#
+#   dozzle:
+#     address: ":9999"
+#
+# Apps (Kiwix, CyberChef, …) use the existing "https" entrypoint on :443.
+# Do NOT add separate entrypoints for 8090/8100/8200/8300 — subdomains on 443 replace them.
+
+# --- traefikv3/compose.yaml (add under ports:) ---
+#
+#   - "9999:9999"
+#
+# Only 9999 is needed beyond 80/443. Remove published 8090-8300 from Traefik if present
+# (those caused HSTS/HTTP mismatch; Beszel may have used 8090 — move Beszel to 8095).

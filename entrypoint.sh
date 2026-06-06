@@ -17,6 +17,10 @@ node ace migration:run --force
 echo "Seeding the database..."
 node ace db:seed
 
+# Re-apply public app URLs from .env (survives NOMAD image updates / db:seed)
+echo "Applying public app URLs from environment..."
+node /usr/local/bin/configure-app-urls.mjs || echo "WARNING: configure-app-urls failed (non-fatal)"
+
 # Start background workers for all queues
 echo "Starting background workers for all queues..."
 node ace queue:work --all &

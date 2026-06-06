@@ -1,0 +1,86 @@
+# NOMAD sub-apps — merge into Traefik dynamic config on your reverse-proxy host.
+# Pattern: HTTPS on port 443 (like path-based or subdomain routing).
+#
+# BEFORE MERGE — replace placeholders:
+#   NOMAD_BACKEND   = IP of the host running Docker Compose (e.g. 192.168.1.100)
+#   nomad.example.com, kiwix.example.com, … = your real domains
+#
+# Pair with project-nomad .env NOMAD_APP_*_URL (entrypoint re-applies on every admin start).
+# See docs/traefik.md
+
+http:
+  routers:
+    nomad-kiwix:
+      entryPoints:
+        - "https"
+      rule: "Host(`kiwix.example.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: nomad-kiwix
+    nomad-cyberchef:
+      entryPoints:
+        - "https"
+      rule: "Host(`cyberchef.example.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: nomad-cyberchef
+    nomad-flatnotes:
+      entryPoints:
+        - "https"
+      rule: "Host(`flatnotes.example.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: nomad-flatnotes
+    nomad-kolibri:
+      entryPoints:
+        - "https"
+      rule: "Host(`kolibri.example.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: nomad-kolibri
+
+  services:
+    nomad-kiwix:
+      loadBalancer:
+        servers:
+          - url: "http://NOMAD_BACKEND:8090"
+        passHostHeader: true
+    nomad-cyberchef:
+      loadBalancer:
+        servers:
+          - url: "http://NOMAD_BACKEND:8100"
+        passHostHeader: true
+    nomad-flatnotes:
+      loadBalancer:
+        servers:
+          - url: "http://NOMAD_BACKEND:8200"
+        passHostHeader: true
+    nomad-kolibri:
+      loadBalancer:
+        servers:
+          - url: "http://NOMAD_BACKEND:8300"
+        passHostHeader: true
+
+# Dozzle — NOMAD Settings hardcodes https://nomad.example.com:9999 (same hostname as UI).
+# Requires entrypoint "dozzle" :9999 in traefik static config + TLS.
+tcp:
+  routers:
+    nomad-dozzle-tls:
+      entryPoints:
+        - "dozzle"
+      rule: "HostSNI(`*`)"
+      service: nomad-dozzle-tcp
+      tls: {}
+  services:
+    nomad-dozzle-tcp:
+      loadBalancer:
+        servers:
+          - address: "NOMAD_BACKEND:9999"

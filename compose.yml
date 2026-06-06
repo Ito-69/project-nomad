@@ -16,6 +16,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
       - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh
+      - ./scripts/configure-app-urls.mjs:/usr/local/bin/configure-app-urls.mjs
       - nomad-update-shared:/app/update-shared
     environment:
       - NODE_ENV=production
@@ -24,6 +25,10 @@ services:
       - APP_KEY=${APP_KEY}
       - HOST=0.0.0.0
       - URL=${NOMAD_URL}
+      - NOMAD_APP_KIWIX_URL=${NOMAD_APP_KIWIX_URL:-}
+      - NOMAD_APP_CYBERCHEF_URL=${NOMAD_APP_CYBERCHEF_URL:-}
+      - NOMAD_APP_FLATNOTES_URL=${NOMAD_APP_FLATNOTES_URL:-}
+      - NOMAD_APP_KOLIBRI_URL=${NOMAD_APP_KOLIBRI_URL:-}
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_DATABASE=nomad

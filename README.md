@@ -2,9 +2,9 @@
 
 This repo is a **Docker Compose–based** deployment of [Project N.O.M.A.D.](https://github.com/Crosstalk-Solutions/project-nomad) (Node for Offline Media, Archives, and Data). It runs the Command Center and its core services (MySQL, Redis, Dozzle, updater) without using the official install script, so you can host it on any system with Docker and keep config in version control.
 
-**Upstream:** [Crosstalk-Solutions/project-nomad](https://github.com/Crosstalk-Solutions/project-nomad)
+**Upstream:** [Crosstalk-Solutions/project-nomad](https://github.com/Crosstalk-Solutions/project-nomad) — Command Center image: `ghcr.io/crosstalk-solutions/project-nomad:latest` (no separate compose repo upstream; this project wraps it).
 
-**Tested host:** This stack is installed and run on a **NixOS** host and works without issues (Docker + Docker Compose v2).
+**Tested host:** NixOS with Docker Compose v2. Should work on any Linux host with Docker.
 
 ---
 
@@ -59,7 +59,11 @@ Detailed guides are in **`docs/`**:
 
 | Topic | File |
 |-------|------|
-| Reverse proxy (Traefik, etc.) | [docs/reverse-proxy.md](docs/reverse-proxy.md) |
+| Reverse proxy (LAN or Traefik) | [docs/reverse-proxy.md](docs/reverse-proxy.md) |
+| Traefik deploy | [docs/traefik.md](docs/traefik.md) |
+| Publishing to GitHub | [docs/github-publish.md](docs/github-publish.md) |
+| LAN `.env` template | [`.env.lan.example`](.env.lan.example) |
+| Traefik `.env` template | [`.env.traefik.example`](.env.traefik.example) |
 | Kiwix symlinks (Information Library) | [docs/kiwix-symlinks.md](docs/kiwix-symlinks.md) |
 | Custom maps (e.g. Europe) | [docs/custom-maps.md](docs/custom-maps.md) |
 | Updater and project path | [docs/updater.md](docs/updater.md) |
@@ -71,9 +75,11 @@ Detailed guides are in **`docs/`**:
 
 ## What is not in this repo
 
-- **`.env`** – contains secrets; use `.env.example` as a template and never commit `.env`.
-- **`storage/`** – ZIM files, maps, MySQL/Redis data, logs; all ignored via `.gitignore`.
-- **`pmtiles-work/`** and **`*.pmtiles`** – working files and map tiles; recreated or copied as needed.
+- **`.env`** – secrets and your IPs/domains; use `.env.example` or `.env.lan.example`.
+- **`storage/`**, **`mysql/`**, **`redis/`** – runtime data (gitignored).
+- **`pmtiles-work/`**, **`*.pmtiles`** – large map files (gitignored).
+
+See [docs/github-publish.md](docs/github-publish.md) for what to commit when publishing.
 
 ---
 
